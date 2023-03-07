@@ -11,7 +11,6 @@ metadata:
     name: pdfcomp
   name: pdfcomp
 spec:
-#  backoffLimit: 0
   schedule: "*/5 * * * *"
   jobTemplate:
     spec:
@@ -37,16 +36,3 @@ spec:
               server: 172.16.1.254
               path: /nfs/pdfcomp
           restartPolicy: OnFailure
-    
----
-apiVersion: v1
-kind: Service
-metadata:
-  labels:
-    app: pdfcomp
-  name: pdfcomp
-  namespace: pdfcomp
-spec:
-  selector:
-    app: pdfcomp
-  type: NodePort
