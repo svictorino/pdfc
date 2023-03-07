@@ -4,42 +4,40 @@ kind: Namespace
 metadata:
   name: pdfcomp
 ---
-apiVersion: apps/v1
-kind: Deployment
+apiVersion: batch/v1
+kind: CronJob
 metadata:
+  labels:
     name: pdfcomp
-    namespace: pdfcomp
-    labels:
-      app: pdfcomp
+  name: pdfcomp
 spec:
-    selector:
-       matchLabels:
-           app: pdfcomp
-    replicas: 1
-    template:
-       metadata:
-         labels:
-           app: pdfcomp
+#  backoffLimit: 0
+  schedule: "*/5 * * * *"
+  jobTemplate:
+    spec:
+      template:
        spec:
-         imagePullSecrets:
-         - name: ocicontainerregauth 
-         containers:
-           - name: pdfcomp
-             image: gru.ocir.io/grpm109q0sqx/pdfcomp:latest
-             resources:
-               limits:
-                 memory: 500Mi
-               requests:
-                 memory: 5Mi
-             imagePullPolicy: Always    
-             volumeMounts:
-               - name: nfs-share2
-                 mountPath: /PDFs
-         volumes:
-         - name: nfs-share2
-           nfs:
-             server: 172.16.1.254
-             path: /nfs/pdfcomp
+          imagePullSecrets:
+          - name: ocicontainerregauth 
+          containers:
+            - name: pdfcomp
+              image: gru.ocir.io/grpm109q0sqx/pdfcomp:latest
+              resources:
+                limits:
+                  memory: 500Mi
+                requests:
+                  memory: 5Mi
+              imagePullPolicy: Always    
+              volumeMounts:
+                - name: nfs-share2
+                  mountPath: /PDFs
+          volumes:
+          - name: nfs-share2
+            nfs:
+              server: 172.16.1.254
+              path: /nfs/pdfcomp
+          restartPolicy: OnFailure
+    
 ---
 apiVersion: v1
 kind: Service
