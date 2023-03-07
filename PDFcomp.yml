@@ -1,0 +1,54 @@
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: pdfcomp
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+    name: pdfcomp
+    namespace: pdfcomp
+    labels:
+      app: pdfcomp
+spec:
+    selector:
+       matchLabels:
+           app: pdfcomp
+    replicas: 1
+    template:
+       metadata:
+         labels:
+           app: pdfcomp
+       spec:
+         imagePullSecrets:
+         - name: ocicontainerregauth 
+         containers:
+           - name: pdfcomp
+             image: gru.ocir.io/grpm109q0sqx/pdfcomp:latest
+             resources:
+               limits:
+                 memory: 500Mi
+               requests:
+                 memory: 5Mi
+             imagePullPolicy: Always    
+             volumeMounts:
+               - name: nfs-share2
+                 mountPath: /PDFs
+         volumes:
+         - name: nfs-share2
+           nfs:
+             server: 172.16.1.254
+             path: /nfs/pdfcomp
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: pdfcomp
+  name: pdfcomp
+  namespace: pdfcomp
+spec:
+  selector:
+    app: pdfcomp
+  type: NodePort
