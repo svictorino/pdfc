@@ -1,10 +1,24 @@
-Pdfc --  PDF Compressor
-=======================
+# Pdfc --  PDF Compressor
 
+***
+
+## Attention!
+
+I didn't modify the original script. I added support to use with kubernetes and docker. Now the script is looking into a specific directory I use so everytime I put a huge pdf there, it converts to a smaller size.
+
+Why? MBA was sending huge PDF files and my notes app (joplin) encrypts everything and when I try to decrypt on my phone it takes a lot of time for big files.
+
+After the file is converted, I have a shared drive with my file server so I place and remove files from my desktop without any pain.
+
+I also tried to fix this README, because I like markdown standard :-)
+
+***
 Simple python script to compress PDF.
 
-Installation
--------------
+## Installation
+
+***
+
 * Install dependency Ghostscript.
 On MacOSX: `brew install ghostscript`
 On Windows: install binaries via [official website] (https://www.ghostscript.com/)
@@ -15,13 +29,14 @@ On MacOSX:
 `echo 'export PATH="/absolute/path/of/the/folder/script/:$PATH"' >> ~/.bash_profile`
 
 Usage
------
+***
 `pdfc [-o output_file_path] [-c number] input_file_path`
 
 Ex:
 `pdfc -o out.pdf in.pdf`
 
 Output:
+
 ```
 Compress PDF...
 Compression by 65%.
